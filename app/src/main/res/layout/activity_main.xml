@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vpMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#33b5e5"
+    tools:context="com.oddhov.camerafordummies.MainActivity">
+
+    <include
+        android:id="@+id/clCameraPermission"
+        layout="@layout/layout_permission_request" />
+
+    <include
+        android:id="@+id/clCamera"
+        layout="@layout/layout_camera" />
+
+</ViewFlipper>
