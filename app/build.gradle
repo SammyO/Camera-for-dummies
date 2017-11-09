@@ -22,6 +22,10 @@ android {
     }
 }
 
+final DAGGER_VERSION = '2.11'
+final LEAK_CANARY_VERSION = '1.5.4'
+final ANKO_VERSION = '0.10.1'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
@@ -30,4 +34,18 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    // Dagger
+    implementation "com.google.dagger:dagger:${DAGGER_VERSION}"
+    kapt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
+
+    // Anko
+    implementation "org.jetbrains.anko:anko-commons:${ANKO_VERSION}"
+    implementation "org.jetbrains.anko:anko-design:${ANKO_VERSION}"
+    implementation "org.jetbrains.anko:anko-sdk15-listeners:${ANKO_VERSION}"
+    implementation "org.jetbrains.anko:anko-sdk15:${ANKO_VERSION}"
+
+    // Leak Canary
+    debugCompile "com.squareup.leakcanary:leakcanary-android:${LEAK_CANARY_VERSION}"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${LEAK_CANARY_VERSION}"
 }

@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">@color/blue</color>
+    <color name="colorPrimaryDark">@color/turquoise</color>
+    <color name="colorAccent">@color/beige</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <!-- beige -->
+    <color name="beige_light2">#FBF8F5</color>
+    <color name="beige_light1">#F4EDE4</color>
+    <color name="beige_normal">#EADCC9</color>
+    <color name="beige_dark1">#E0D2C0</color>
+    <color name="beige_dark2">#C2B7A7</color>
+    <color name="beige_dark3">#AEA497</color>
+    <color name="beige_dark4">#726D65</color>
+
+    <color name="brown_dark">#A88E6A</color>
+    <color name="brown_light">#C7B397</color>
+
+    <!-- primaries - scheme -->
+    <color name="blue">#05668D</color>
+    <color name="turquoise">#028090</color>
+    <color name="beige">#F0F3BD</color>
+    <color name="cyan">#00A896</color>
+    <color name="green">#02C39A</color>
+
+    <!-- primaries - basic -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- green -->
+    <color name="green_dark2">#00785D</color>
+    <color name="green_dark1">#009B78</color>
+    <color name="green_light1">#2AC9A5</color>
+    <color name="green_light2">#52D3B6</color>
 </resources>
