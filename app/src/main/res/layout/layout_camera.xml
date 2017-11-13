@@ -1,6 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/green_light1"
+    android:fitsSystemWindows="true">
 
-</LinearLayout>
+    <Button
+        android:id="@+id/dummy_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/green_dark2"
+        android:textColor="@color/white"
+        android:text="@string/button_take_picture" />
+
+</FrameLayout>

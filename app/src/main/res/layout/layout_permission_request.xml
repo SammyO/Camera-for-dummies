@@ -1,15 +1,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/green_light2"
+    android:background="@color/green_light1"
     android:fitsSystemWindows="true">
 
     <Button
-        android:id="@+id/dummy_button"
+        android:id="@+id/btnEnablePermission"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/green_dark2"
+        android:background="@color/cyan"
         android:textColor="@color/white"
         android:text="@string/button_enable_permission" />
 

@@ -2,4 +2,12 @@
     <string name="app_name">Camera for Dummies</string>
 
     <string name="button_enable_permission">Enable permission</string>
+    <string name="button_take_picture">Take picture</string>
+    <string name="alert_allow_camera_permission_message">We need permission to use your camera. Please go to app settings to enable camera permission</string>
+    <string name="alert_allow_camera_permission_title">Permission needed</string>
+    <string name="alert_allow_storage_permission_message">We need permission to access your storage. Please go to app settings to enable storage permission</string>
+    <string name="alert_allow_storage_permission_title">Permission needed</string>
+    <string name="alert_allow_permission_app_info">App settings</string>
+
+    <string name="word.cancel">Cancel</string>
 </resources>

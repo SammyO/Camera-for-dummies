@@ -1,4 +1,4 @@
-package com.oddhov.camerafordummies
+package com.oddhov.camerafordummies.ui.main
 
 import com.oddhov.camerafordummies.data.di.PerActivity
 import com.oddhov.camerafordummies.ui.main.view.MainActivity

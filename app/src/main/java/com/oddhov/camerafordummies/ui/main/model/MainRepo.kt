@@ -1,6 +1,6 @@
 package com.oddhov.camerafordummies.ui.main.model
 
-import com.oddhov.camerafordummies.MainContract
+import com.oddhov.camerafordummies.ui.main.MainContract
 import javax.inject.Inject
 
 /**

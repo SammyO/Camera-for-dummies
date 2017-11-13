@@ -8,11 +8,11 @@
     tools:context="com.oddhov.camerafordummies.ui.main.view.MainActivity">
 
     <include
-        android:id="@+id/clCameraPermission"
+        android:id="@+id/layoutCameraPermission"
         layout="@layout/layout_permission_request" />
 
     <include
-        android:id="@+id/clCamera"
+        android:id="@+id/layoutCamera"
         layout="@layout/layout_camera" />
 
 </ViewFlipper>
