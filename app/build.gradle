@@ -6,6 +6,13 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+repositories {
+    maven { url "https://jitpack.io" }
+    maven { url 'https://maven.fabric.io/public' }
+    maven { url 'https://maven.google.com' }
+    mavenCentral()
+}
+
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -67,4 +74,8 @@ dependencies {
 
     // RxPermissions
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    // Fotoapparat
+    implementation 'io.fotoapparat.fotoapparat:library:1.4.1'
 }

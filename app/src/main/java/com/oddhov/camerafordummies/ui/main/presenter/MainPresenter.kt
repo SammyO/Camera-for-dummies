@@ -1,8 +1,10 @@
 package com.oddhov.camerafordummies.ui.main.presenter
 
 import android.Manifest
+import android.util.Log
 import com.oddhov.camerafordummies.ui.main.MainContract
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.fotoapparat.result.PhotoResult
 import javax.inject.Inject
 
 /**
@@ -27,8 +29,8 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .all({it.granted})
                 .subscribe { granted ->
-                    if (granted) view.showCameraView()
-                    else view.showPermissionView()
+                    if (granted) enableCameraView()
+                    else enablePermissionsView()
                 }
     }
 
@@ -40,7 +42,7 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                 .all{it.granted}
                                 .subscribe{ granted ->
-                                    if (granted) view.showCameraView()
+                                    if (granted) enableCameraView()
                                     else view.showStoragePermissionRationale()
                                 }
 
@@ -50,9 +52,23 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
                 })
     }
 
+    override fun pictureTaken(result: PhotoResult) {
+        Log.e("MainPresenter", "Picture taken")
+    }
+
     private fun checkPermissions() {
-        if (rxPermissions.isGranted(Manifest.permission.CAMERA) &&
-                rxPermissions.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE))
-            view.showCameraView()
+//        if (rxPermissions.isGranted(Manifest.permission.CAMERA) &&
+//                rxPermissions.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE))
+//            view.showCameraView()
+    }
+
+    private fun enableCameraView() {
+        view.showCameraView()
+        view.startCamera()
+    }
+
+    private fun enablePermissionsView() {
+        view.showPermissionView()
+        view.stopCamera()
     }
 }

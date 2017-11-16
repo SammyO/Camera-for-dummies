@@ -6,7 +6,19 @@ import com.oddhov.camerafordummies.R
 import com.oddhov.camerafordummies.ui.main.DaggerMainComponent
 import com.oddhov.camerafordummies.ui.main.MainContract
 import com.oddhov.camerafordummies.ui.main.MainModule
+import io.fotoapparat.Fotoapparat
+import io.fotoapparat.log.Loggers.logcat
+import io.fotoapparat.log.Loggers.loggers
+import io.fotoapparat.parameter.ScaleType
+import io.fotoapparat.parameter.selector.FocusModeSelectors.autoFocus
+import io.fotoapparat.parameter.selector.FocusModeSelectors.continuousFocus
+import io.fotoapparat.parameter.selector.FocusModeSelectors.fixed
+import io.fotoapparat.parameter.selector.LensPositionSelectors.back
+import io.fotoapparat.parameter.selector.Selectors.firstAvailable
+import io.fotoapparat.parameter.selector.SizeSelectors.biggestSize
 import kotlinx.android.synthetic.main.activity_main.vpMain
+import kotlinx.android.synthetic.main.layout_camera.btnTakePicture
+import kotlinx.android.synthetic.main.layout_camera.camera_view
 import kotlinx.android.synthetic.main.layout_permission_request.btnEnablePermission
 import org.jetbrains.anko.alert
 import javax.inject.Inject
@@ -18,6 +30,26 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(), MainContract.View {
     @Inject
     lateinit var presenter: MainContract.Presenter
+
+    private val camera by lazy {
+        Fotoapparat
+                .with(this)
+                .into(camera_view)
+                .previewScaleType(ScaleType.CENTER_CROP)
+                .photoSize(biggestSize())
+                .lensPosition(back())
+                .focusMode(firstAvailable(
+                        continuousFocus(),
+                        autoFocus(),
+                        fixed()
+                ))
+                .logger(loggers(
+                        logcat()
+                ))
+                .build()
+    }
+
+    private var cameraStarted = false;
 
     // region Activity Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +95,20 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             negativeButton(R.string.word_cancel, {})
         }.show()
     }
+
+    override fun startCamera() {
+        if (!cameraStarted) {
+            camera.start()
+            cameraStarted = true
+        }
+    }
+
+    override fun stopCamera() {
+        if (cameraStarted) {
+            camera.stop()
+        }
+        cameraStarted = false
+    }
     // endregion
 
     // region Helper Methods
@@ -75,6 +121,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private fun setClickListeners() {
         btnEnablePermission.setOnClickListener { presenter.enablePermissionClicked() }
+        btnTakePicture.setOnClickListener { presenter.pictureTaken(camera.takePicture()) }
     }
 
     private fun changeScreenState(state: Int) {

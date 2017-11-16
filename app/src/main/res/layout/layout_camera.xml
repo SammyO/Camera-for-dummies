@@ -1,16 +1,23 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/green_light1"
     android:fitsSystemWindows="true">
 
+    <io.fotoapparat.view.CameraView
+        android:id="@+id/camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <Button
-        android:id="@+id/dummy_button"
+        android:id="@+id/btnTakePicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:background="@color/green_dark2"
+        android:text="@string/button_take_picture"
         android:textColor="@color/white"
-        android:text="@string/button_take_picture" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>
