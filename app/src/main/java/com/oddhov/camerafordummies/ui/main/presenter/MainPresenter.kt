@@ -1,11 +1,20 @@
 package com.oddhov.camerafordummies.ui.main.presenter
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.os.Environment
 import android.util.Log
 import com.oddhov.camerafordummies.ui.main.MainContract
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.fotoapparat.result.PhotoResult
+import io.fotoapparat.result.adapter.rxjava2.SingleAdapter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
+
 
 /**
  * Created by sammy on 09/11/2017.
@@ -53,7 +62,17 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
     }
 
     override fun pictureTaken(result: PhotoResult) {
-        Log.e("MainPresenter", "Picture taken")
+
+        result
+                .toBitmap()
+                .adapt(SingleAdapter.toSingle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe( {
+                    view.storeBitmap(it.bitmap)
+                } , {
+                    Log.e("MainPresenter", it.toString())
+                })
     }
 
     private fun checkPermissions() {
@@ -70,5 +89,34 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
     private fun enablePermissionsView() {
         view.showPermissionView()
         view.stopCamera()
+    }
+
+    /**
+     * Creates a file in external storage and returns the file path
+     */
+    @SuppressLint("SimpleDateFormat")
+    private fun createFile(): File? {
+        val currentTimeMillis = System.currentTimeMillis()
+        val today = Date(currentTimeMillis)
+        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss")
+        val title = dateFormat.format(today)
+        val fileName = "IMG_" + title + ".png"
+
+        var imageDir: File? = null
+        val extStorageDir = Environment.getExternalStorageDirectory()
+        if (extStorageDir.canWrite()) {
+            imageDir = File(extStorageDir.path + "/cropping/", fileName)
+        }
+        if (imageDir != null) {
+            if (!imageDir.exists()) {
+                imageDir.mkdirs()
+            }
+            if (imageDir.canWrite()) {
+                return imageDir;
+            } else {
+                Log.e("MainActivity", "Can't write to file")
+            }
+        }
+        return null
     }
 }

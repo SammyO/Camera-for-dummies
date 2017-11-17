@@ -78,4 +78,5 @@ dependencies {
 
     // Fotoapparat
     implementation 'io.fotoapparat.fotoapparat:library:1.4.1'
+    implementation "io.fotoapparat.fotoapparat:adapter-rxjava2:1.4.1"
 }

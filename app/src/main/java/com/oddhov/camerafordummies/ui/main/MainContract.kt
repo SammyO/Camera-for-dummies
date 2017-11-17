@@ -1,5 +1,6 @@
 package com.oddhov.camerafordummies.ui.main
 
+import android.graphics.Bitmap
 import io.fotoapparat.result.PhotoResult
 
 /**
@@ -16,6 +17,8 @@ interface MainContract {
 
         fun startCamera()
         fun stopCamera()
+
+        fun storeBitmap(bitmap: Bitmap)
     }
 
     interface Presenter {
@@ -29,5 +32,4 @@ interface MainContract {
     }
 
     interface Repo
-
 }

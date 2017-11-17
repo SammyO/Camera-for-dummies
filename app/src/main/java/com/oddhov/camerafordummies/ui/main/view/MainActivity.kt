@@ -1,7 +1,12 @@
 package com.oddhov.camerafordummies.ui.main.view
 
+import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.os.Bundle
+import android.os.Environment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.oddhov.camerafordummies.R
 import com.oddhov.camerafordummies.ui.main.DaggerMainComponent
 import com.oddhov.camerafordummies.ui.main.MainContract
@@ -21,7 +26,13 @@ import kotlinx.android.synthetic.main.layout_camera.btnTakePicture
 import kotlinx.android.synthetic.main.layout_camera.camera_view
 import kotlinx.android.synthetic.main.layout_permission_request.btnEnablePermission
 import org.jetbrains.anko.alert
+import java.io.File
+import java.io.FileOutputStream
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
+
 
 /**
  * Created by sammy on 08/11/2017.
@@ -109,9 +120,28 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
         cameraStarted = false
     }
+
+    override fun storeBitmap(bitmap: Bitmap) {
+        val file = createFile()
+        if (file == null) {
+            Log.e("MainActivity", "file null")
+            return
+        }
+
+        try {
+            val out = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            out.flush()
+            out.close()
+            MediaScannerConnection.scanFile(this, arrayOf(file.toString()), null
+            ) { _, _ -> }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
     // endregion
 
-    // region Helper Methods
+    // region Helper Methods (UI)
     private fun setupDi() {
         DaggerMainComponent.builder()
                 .mainModule(MainModule(this))
@@ -122,10 +152,43 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private fun setClickListeners() {
         btnEnablePermission.setOnClickListener { presenter.enablePermissionClicked() }
         btnTakePicture.setOnClickListener { presenter.pictureTaken(camera.takePicture()) }
+//        btnTakePicture.setOnClickListener {
+//            var photo = camera.takePicture()
+//            photo.saveToFile(createFile())
+//        }
     }
 
     private fun changeScreenState(state: Int) {
         vpMain.displayedChild = vpMain.indexOfChild(vpMain.findViewById(state))
+    }
+    // endregion
+
+    // region Helper Methods (Photo processing)
+    /**
+     * Creates a file in external storage and returns the file path
+     */
+    @SuppressLint("SimpleDateFormat")
+    private fun createFile(): File? {
+        val currentTimeMillis = System.currentTimeMillis()
+        val today = Date(currentTimeMillis)
+        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss")
+        val title = dateFormat.format(today)
+        val fileName = "IMG_$title.png"
+
+        val extStorageDir = Environment.getExternalStorageDirectory()
+        if (extStorageDir.canWrite()) {
+            val imageDir = File(extStorageDir.path + "/camerafordummies")
+            if (!imageDir.exists()) {
+                imageDir.mkdirs()
+            }
+            if (imageDir.canWrite()) {
+                val file = File(imageDir, fileName)
+                if (file.exists())
+                    file.delete()
+                return file
+            }
+        }
+        return null
     }
     // endregion
 }
