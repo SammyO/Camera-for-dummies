@@ -1,5 +1,6 @@
 package com.oddhov.camerafordummies.ui.main.view
 
+import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.oddhov.camerafordummies.CameraForDummiesApplication
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 .build()
     }
 
-    private var cameraStarted = false;
+    private var cameraStarted = false
 
     // region Activity Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +62,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setupDi()
         setContentView(R.layout.activity_main)
         setClickListeners()
-        presenter.setupView()
     }
 
     override fun onStart() {
@@ -99,7 +99,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }.show()
     }
 
-    override fun showPhotoTakenToast() {
+    override fun showPhotoTakenToast(fileLocation: String) {
+        MediaScannerConnection.scanFile(this, arrayOf(fileLocation), null
+        ) { _, _ -> }
         toast(R.string.toast_photo_taken_success)
     }
 

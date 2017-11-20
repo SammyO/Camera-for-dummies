@@ -2,7 +2,7 @@ package com.oddhov.camerafordummies.ui.main
 
 import android.graphics.Bitmap
 import io.fotoapparat.result.PhotoResult
-import io.reactivex.Completable
+import io.reactivex.Single
 
 /**
  * Created by sammy on 09/11/2017.
@@ -16,7 +16,7 @@ interface MainContract {
         fun showStoragePermissionRationale()
         fun showCameraPermissionRationale()
 
-        fun showPhotoTakenToast()
+        fun showPhotoTakenToast(fileLocation: String)
         fun showPhotoErrorToast()
 
         fun startCamera()
@@ -27,13 +27,12 @@ interface MainContract {
         fun subscribe()
         fun unsubscribe()
 
-        fun setupView()
         fun enablePermissionClicked()
 
         fun pictureTaken(result: PhotoResult)
     }
 
     interface Repo {
-        fun storeBitmap(bitmap: Bitmap): Completable
+        fun storeBitmap(bitmap: Bitmap): Single<String>
     }
 }

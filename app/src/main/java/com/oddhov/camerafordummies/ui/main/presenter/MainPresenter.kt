@@ -6,8 +6,6 @@ import com.oddhov.camerafordummies.ui.main.MainContract
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.fotoapparat.result.PhotoResult
 import io.fotoapparat.result.adapter.rxjava2.SingleAdapter
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -27,16 +25,6 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
 
     override fun unsubscribe() {
 
-    }
-
-    override fun setupView() {
-        rxPermissions.requestEach(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .all({ it.granted })
-                .subscribe { granted ->
-                    if (granted) enableCameraView()
-                    else enablePermissionsView()
-                }
     }
 
     override fun enablePermissionClicked() {
@@ -61,12 +49,12 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
         result
                 .toBitmap()
                 .adapt(SingleAdapter.toSingle())
-                .map {
+                .flatMap {
                     repo.storeBitmap(it.bitmap)
                 }
                 .applySchedulers()
                 .subscribe({
-                    view.showPhotoTakenToast()
+                    view.showPhotoTakenToast(it)
                 }, {
                     Timber.e(it)
                     view.showPhotoErrorToast()
@@ -74,9 +62,13 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
     }
 
     private fun checkPermissions() {
-//        if (rxPermissions.isGranted(Manifest.permission.CAMERA) &&
-//                rxPermissions.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE))
-//            view.showCameraView()
+        rxPermissions.requestEach(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .all({ it.granted })
+                .subscribe { granted ->
+                    if (granted) enableCameraView()
+                    else enablePermissionsView()
+                }
     }
 
     private fun enableCameraView() {

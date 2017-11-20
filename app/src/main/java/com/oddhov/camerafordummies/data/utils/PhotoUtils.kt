@@ -3,10 +3,9 @@ package com.oddhov.camerafordummies.data.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.media.MediaScannerConnection
 import android.os.Environment
 import com.oddhov.camerafordummies.di.scopes.ApplicationContext
-import io.reactivex.Completable
+import io.reactivex.Single
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.Exception
@@ -21,8 +20,8 @@ import javax.inject.Inject
 class PhotoUtils
 @Inject
 constructor(@ApplicationContext private val context: Context) {
-     fun storeBitmap(bitmap: Bitmap): Completable {
-         return Completable.create {
+     fun storeBitmap(bitmap: Bitmap): Single<String> {
+         return Single.create {
              val file = createFile()
              if (file == null) {
                  it.onError(Throwable("File is null"))
@@ -33,9 +32,7 @@ constructor(@ApplicationContext private val context: Context) {
                  bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
                  out.flush()
                  out.close()
-                 MediaScannerConnection.scanFile(context, arrayOf(file.toString()), null
-                 ) { _, _ -> }
-                 it.onComplete()
+                 it.onSuccess(file.toString())
              } catch (e: Exception) {
                  it.onError(e)
              }
@@ -53,7 +50,7 @@ constructor(@ApplicationContext private val context: Context) {
         val title = dateFormat.format(today)
         val fileName = "IMG_$title.png"
 
-        val extStorageDir = Environment.getExternalStorageDirectory()
+        val extStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
         if (extStorageDir.canWrite()) {
             val imageDir = File(extStorageDir.path + "/camerafordummies")
             if (!imageDir.exists()) {
