@@ -9,5 +9,8 @@
     <string name="alert_allow_storage_permission_title">Permission needed</string>
     <string name="alert_allow_permission_app_info">App settings</string>
 
+    <string name="toast_photo_taken_success">Photo taken and stored</string>
+    <string name="toast_photo_taken_error">Something went wrong while processing your photo</string>
+
     <string name="word.cancel">Cancel</string>
 </resources>

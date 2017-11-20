@@ -79,4 +79,7 @@ dependencies {
     // Fotoapparat
     implementation 'io.fotoapparat.fotoapparat:library:1.4.1'
     implementation "io.fotoapparat.fotoapparat:adapter-rxjava2:1.4.1"
+
+    //Misc
+    implementation 'com.jakewharton.timber:timber:4.5.1'
 }

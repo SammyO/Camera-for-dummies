@@ -1,18 +1,14 @@
 package com.oddhov.camerafordummies.ui.main.presenter
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.os.Environment
-import android.util.Log
+import com.oddhov.camerafordummies.data.extentions.applySchedulers
 import com.oddhov.camerafordummies.ui.main.MainContract
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.fotoapparat.result.PhotoResult
 import io.fotoapparat.result.adapter.rxjava2.SingleAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -36,7 +32,7 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
     override fun setupView() {
         rxPermissions.requestEach(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .all({it.granted})
+                .all({ it.granted })
                 .subscribe { granted ->
                     if (granted) enableCameraView()
                     else enablePermissionsView()
@@ -49,8 +45,8 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
                     if (permission.granted) {
                         rxPermissions.requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                .all{it.granted}
-                                .subscribe{ granted ->
+                                .all { it.granted }
+                                .subscribe { granted ->
                                     if (granted) enableCameraView()
                                     else view.showStoragePermissionRationale()
                                 }
@@ -62,16 +58,18 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
     }
 
     override fun pictureTaken(result: PhotoResult) {
-
         result
                 .toBitmap()
                 .adapt(SingleAdapter.toSingle())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe( {
-                    view.storeBitmap(it.bitmap)
-                } , {
-                    Log.e("MainPresenter", it.toString())
+                .map {
+                    repo.storeBitmap(it.bitmap)
+                }
+                .applySchedulers()
+                .subscribe({
+                    view.showPhotoTakenToast()
+                }, {
+                    Timber.e(it)
+                    view.showPhotoErrorToast()
                 })
     }
 
@@ -89,34 +87,5 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
     private fun enablePermissionsView() {
         view.showPermissionView()
         view.stopCamera()
-    }
-
-    /**
-     * Creates a file in external storage and returns the file path
-     */
-    @SuppressLint("SimpleDateFormat")
-    private fun createFile(): File? {
-        val currentTimeMillis = System.currentTimeMillis()
-        val today = Date(currentTimeMillis)
-        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss")
-        val title = dateFormat.format(today)
-        val fileName = "IMG_" + title + ".png"
-
-        var imageDir: File? = null
-        val extStorageDir = Environment.getExternalStorageDirectory()
-        if (extStorageDir.canWrite()) {
-            imageDir = File(extStorageDir.path + "/cropping/", fileName)
-        }
-        if (imageDir != null) {
-            if (!imageDir.exists()) {
-                imageDir.mkdirs()
-            }
-            if (imageDir.canWrite()) {
-                return imageDir;
-            } else {
-                Log.e("MainActivity", "Can't write to file")
-            }
-        }
-        return null
     }
 }

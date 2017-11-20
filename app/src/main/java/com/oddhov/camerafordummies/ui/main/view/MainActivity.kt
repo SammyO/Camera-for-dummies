@@ -1,16 +1,12 @@
 package com.oddhov.camerafordummies.ui.main.view
 
-import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.media.MediaScannerConnection
 import android.os.Bundle
-import android.os.Environment
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import com.oddhov.camerafordummies.CameraForDummiesApplication
 import com.oddhov.camerafordummies.R
-import com.oddhov.camerafordummies.ui.main.DaggerMainComponent
+import com.oddhov.camerafordummies.di.component.DaggerActivityComponent
+import com.oddhov.camerafordummies.di.modules.MainModule
 import com.oddhov.camerafordummies.ui.main.MainContract
-import com.oddhov.camerafordummies.ui.main.MainModule
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.Loggers.logcat
 import io.fotoapparat.log.Loggers.loggers
@@ -26,11 +22,7 @@ import kotlinx.android.synthetic.main.layout_camera.btnTakePicture
 import kotlinx.android.synthetic.main.layout_camera.camera_view
 import kotlinx.android.synthetic.main.layout_permission_request.btnEnablePermission
 import org.jetbrains.anko.alert
-import java.io.File
-import java.io.FileOutputStream
-import java.lang.Exception
-import java.text.SimpleDateFormat
-import java.util.Date
+import org.jetbrains.anko.toast
 import javax.inject.Inject
 
 
@@ -107,6 +99,14 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }.show()
     }
 
+    override fun showPhotoTakenToast() {
+        toast(R.string.toast_photo_taken_success)
+    }
+
+    override fun showPhotoErrorToast() {
+        toast(R.string.toast_photo_taken_error)
+    }
+
     override fun startCamera() {
         if (!cameraStarted) {
             camera.start()
@@ -120,30 +120,12 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
         cameraStarted = false
     }
-
-    override fun storeBitmap(bitmap: Bitmap) {
-        val file = createFile()
-        if (file == null) {
-            Log.e("MainActivity", "file null")
-            return
-        }
-
-        try {
-            val out = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-            out.flush()
-            out.close()
-            MediaScannerConnection.scanFile(this, arrayOf(file.toString()), null
-            ) { _, _ -> }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
     // endregion
 
     // region Helper Methods (UI)
     private fun setupDi() {
-        DaggerMainComponent.builder()
+        DaggerActivityComponent.builder()
+                .applicationComponent((application as CameraForDummiesApplication).getComponent())
                 .mainModule(MainModule(this))
                 .build()
                 .inject(this)
@@ -152,43 +134,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private fun setClickListeners() {
         btnEnablePermission.setOnClickListener { presenter.enablePermissionClicked() }
         btnTakePicture.setOnClickListener { presenter.pictureTaken(camera.takePicture()) }
-//        btnTakePicture.setOnClickListener {
-//            var photo = camera.takePicture()
-//            photo.saveToFile(createFile())
-//        }
     }
 
     private fun changeScreenState(state: Int) {
         vpMain.displayedChild = vpMain.indexOfChild(vpMain.findViewById(state))
-    }
-    // endregion
-
-    // region Helper Methods (Photo processing)
-    /**
-     * Creates a file in external storage and returns the file path
-     */
-    @SuppressLint("SimpleDateFormat")
-    private fun createFile(): File? {
-        val currentTimeMillis = System.currentTimeMillis()
-        val today = Date(currentTimeMillis)
-        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss")
-        val title = dateFormat.format(today)
-        val fileName = "IMG_$title.png"
-
-        val extStorageDir = Environment.getExternalStorageDirectory()
-        if (extStorageDir.canWrite()) {
-            val imageDir = File(extStorageDir.path + "/camerafordummies")
-            if (!imageDir.exists()) {
-                imageDir.mkdirs()
-            }
-            if (imageDir.canWrite()) {
-                val file = File(imageDir, fileName)
-                if (file.exists())
-                    file.delete()
-                return file
-            }
-        }
-        return null
     }
     // endregion
 }

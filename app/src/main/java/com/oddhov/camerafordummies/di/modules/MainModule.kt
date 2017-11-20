@@ -1,6 +1,7 @@
-package com.oddhov.camerafordummies.ui.main
+package com.oddhov.camerafordummies.di.modules
 
-import com.oddhov.camerafordummies.data.di.PerActivity
+import com.oddhov.camerafordummies.di.scopes.PerActivity
+import com.oddhov.camerafordummies.ui.main.MainContract
 import com.oddhov.camerafordummies.ui.main.model.MainRepo
 import com.oddhov.camerafordummies.ui.main.presenter.MainPresenter
 import com.oddhov.camerafordummies.ui.main.view.MainActivity
@@ -22,13 +23,14 @@ class MainModule(private val activity: MainActivity) {
     }
 
     @Provides
-    internal fun providePresenter(repo: MainContract.Repo, rxPermissions: RxPermissions): MainContract.Presenter {
-        return MainPresenter(activity, repo, rxPermissions)
+    internal fun providePresenter(presenter: MainPresenter, repo: MainContract.Repo,
+                                  rxPermissions: RxPermissions): MainContract.Presenter {
+        return presenter
     }
 
     @Provides
-    internal fun provideRepo(): MainContract.Repo {
-        return MainRepo()
+    internal fun provideRepo(repo: MainRepo): MainContract.Repo {
+        return repo
     }
 
     @Provides

@@ -2,6 +2,7 @@ package com.oddhov.camerafordummies.ui.main
 
 import android.graphics.Bitmap
 import io.fotoapparat.result.PhotoResult
+import io.reactivex.Completable
 
 /**
  * Created by sammy on 09/11/2017.
@@ -15,10 +16,11 @@ interface MainContract {
         fun showStoragePermissionRationale()
         fun showCameraPermissionRationale()
 
+        fun showPhotoTakenToast()
+        fun showPhotoErrorToast()
+
         fun startCamera()
         fun stopCamera()
-
-        fun storeBitmap(bitmap: Bitmap)
     }
 
     interface Presenter {
@@ -31,5 +33,7 @@ interface MainContract {
         fun pictureTaken(result: PhotoResult)
     }
 
-    interface Repo
+    interface Repo {
+        fun storeBitmap(bitmap: Bitmap): Completable
+    }
 }
