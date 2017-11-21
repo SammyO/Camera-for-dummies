@@ -16,11 +16,15 @@ interface MainContract {
         fun showStoragePermissionRationale()
         fun showCameraPermissionRationale()
 
-        fun showPhotoTakenToast(fileLocation: String)
+        fun showPhotoTakenToast()
         fun showPhotoErrorToast()
+        fun showProgressDialog()
+        fun hideProgressDialog()
 
         fun startCamera()
         fun stopCamera()
+
+        fun runMediaScanner(fileLocation: String)
     }
 
     interface Presenter {
@@ -33,6 +37,7 @@ interface MainContract {
     }
 
     interface Repo {
+        fun rotateBitmap(bitmap: Bitmap): Single<Bitmap>
         fun storeBitmap(bitmap: Bitmap): Single<String>
     }
 }

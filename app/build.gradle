@@ -34,7 +34,6 @@ android {
 final DAGGER_VERSION = '2.11'
 final LEAK_CANARY_VERSION = '1.5.4'
 final ANKO_VERSION = '0.10.1'
-final RX_JAVA_VERSION = '2.1.5'
 
 kapt {
     generateStubs = true
@@ -43,9 +42,9 @@ kapt {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:support-v4:26.1.0'
-    testImplementation 'junit:junit:4.12'
+    implementation "com.android.support:appcompat-v7:${project.appCompatVersion}"
+    implementation "com.android.support:support-v4:${project.appCompatVersion}"
+    testImplementation "junit:junit:${project.junitVersion}"
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
@@ -69,7 +68,7 @@ dependencies {
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${LEAK_CANARY_VERSION}"
 
     // RxJava
-    implementation "io.reactivex.rxjava2:rxjava:${RX_JAVA_VERSION}"
+    implementation "io.reactivex.rxjava2:rxjava:${project.rxjava2Version}"
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     // RxPermissions

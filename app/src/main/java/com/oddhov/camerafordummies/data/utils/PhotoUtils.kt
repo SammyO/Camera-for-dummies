@@ -1,10 +1,9 @@
 package com.oddhov.camerafordummies.data.utils
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.os.Environment
-import com.oddhov.camerafordummies.di.scopes.ApplicationContext
 import io.reactivex.Single
 import java.io.File
 import java.io.FileOutputStream
@@ -19,7 +18,18 @@ import javax.inject.Inject
 
 class PhotoUtils
 @Inject
-constructor(@ApplicationContext private val context: Context) {
+constructor() {
+    fun rotateBitmap(bitmap: Bitmap): Single<Bitmap> {
+        return Single.create {
+            val width = bitmap.width
+            val height = bitmap.height
+            val matrix = Matrix()
+            matrix.postRotate(90f)
+
+            it.onSuccess(Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true))
+        }
+    }
+
      fun storeBitmap(bitmap: Bitmap): Single<String> {
          return Single.create {
              val file = createFile()
@@ -50,7 +60,8 @@ constructor(@ApplicationContext private val context: Context) {
         val title = dateFormat.format(today)
         val fileName = "IMG_$title.png"
 
-        val extStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+//        val extStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+        val extStorageDir = Environment.getExternalStorageDirectory()
         if (extStorageDir.canWrite()) {
             val imageDir = File(extStorageDir.path + "/camerafordummies")
             if (!imageDir.exists()) {

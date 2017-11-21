@@ -4,7 +4,6 @@ import android.Manifest
 import com.oddhov.camerafordummies.data.extentions.applySchedulers
 import com.oddhov.camerafordummies.ui.main.MainContract
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.fotoapparat.result.PhotoResult
 import io.fotoapparat.result.adapter.rxjava2.SingleAdapter
 import timber.log.Timber
 import javax.inject.Inject
@@ -45,16 +44,24 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
                 })
     }
 
-    override fun pictureTaken(result: PhotoResult) {
+    override fun pictureTaken(result: io.fotoapparat.result.PhotoResult) {
+        view.showProgressDialog()
+
         result
                 .toBitmap()
                 .adapt(SingleAdapter.toSingle())
                 .flatMap {
-                    repo.storeBitmap(it.bitmap)
+                    repo.rotateBitmap(it.bitmap)
+                }
+                .flatMap {
+                    repo.storeBitmap(it)
                 }
                 .applySchedulers()
+                .doFinally {
+                    view.hideProgressDialog() }
                 .subscribe({
-                    view.showPhotoTakenToast(it)
+                    view.runMediaScanner(it)
+                    view.showPhotoTakenToast()
                 }, {
                     Timber.e(it)
                     view.showPhotoErrorToast()

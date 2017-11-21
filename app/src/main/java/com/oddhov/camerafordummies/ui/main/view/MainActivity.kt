@@ -3,6 +3,7 @@ package com.oddhov.camerafordummies.ui.main.view
 import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.oddhov.camerafordummies.CameraForDummiesApplication
 import com.oddhov.camerafordummies.R
 import com.oddhov.camerafordummies.di.component.DaggerActivityComponent
@@ -21,6 +22,7 @@ import io.fotoapparat.parameter.selector.SizeSelectors.biggestSize
 import kotlinx.android.synthetic.main.activity_main.vpMain
 import kotlinx.android.synthetic.main.layout_camera.btnTakePicture
 import kotlinx.android.synthetic.main.layout_camera.camera_view
+import kotlinx.android.synthetic.main.layout_camera.progressBar
 import kotlinx.android.synthetic.main.layout_permission_request.btnEnablePermission
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
@@ -99,14 +101,20 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }.show()
     }
 
-    override fun showPhotoTakenToast(fileLocation: String) {
-        MediaScannerConnection.scanFile(this, arrayOf(fileLocation), null
-        ) { _, _ -> }
+    override fun showPhotoTakenToast() {
         toast(R.string.toast_photo_taken_success)
     }
 
     override fun showPhotoErrorToast() {
         toast(R.string.toast_photo_taken_error)
+    }
+
+    override fun hideProgressDialog() {
+        progressBar.visibility = View.GONE
+    }
+
+    override fun showProgressDialog() {
+        progressBar.visibility = View.VISIBLE
     }
 
     override fun startCamera() {
@@ -121,6 +129,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             camera.stop()
         }
         cameraStarted = false
+    }
+
+    override fun runMediaScanner(fileLocation: String) {
+        MediaScannerConnection.scanFile(this, arrayOf(fileLocation), null
+        ) { _, _ -> }
     }
     // endregion
 
