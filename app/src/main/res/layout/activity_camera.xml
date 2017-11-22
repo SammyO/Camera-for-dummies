@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -12,7 +11,7 @@
         android:id="@+id/vpMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.oddhov.camerafordummies.ui.main.view.MainActivity">
+        tools:context="com.oddhov.camerafordummies.ui.camera.view.CameraActivity">
 
         <include
             android:id="@+id/layoutCameraPermission"
@@ -46,5 +45,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3"
         tools:visibility="visible" />
-    
+
 </android.support.constraint.ConstraintLayout>

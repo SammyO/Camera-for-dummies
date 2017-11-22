@@ -15,7 +15,6 @@ import javax.inject.Inject
 /**
  * Created by sammy on 17/11/2017.
  */
-
 class PhotoUtils
 @Inject
 constructor() {

@@ -1,4 +1,4 @@
-package com.oddhov.camerafordummies.ui.main.view
+package com.oddhov.camerafordummies.ui.camera.view
 
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
@@ -9,8 +9,8 @@ import android.view.View
 import com.oddhov.camerafordummies.CameraForDummiesApplication
 import com.oddhov.camerafordummies.R
 import com.oddhov.camerafordummies.di.component.DaggerActivityComponent
-import com.oddhov.camerafordummies.di.modules.MainModule
-import com.oddhov.camerafordummies.ui.main.MainContract
+import com.oddhov.camerafordummies.di.modules.CameraModule
+import com.oddhov.camerafordummies.ui.camera.CameraContract
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.Loggers.logcat
 import io.fotoapparat.log.Loggers.loggers
@@ -21,8 +21,8 @@ import io.fotoapparat.parameter.selector.FocusModeSelectors.fixed
 import io.fotoapparat.parameter.selector.LensPositionSelectors.back
 import io.fotoapparat.parameter.selector.Selectors.firstAvailable
 import io.fotoapparat.parameter.selector.SizeSelectors.biggestSize
-import kotlinx.android.synthetic.main.activity_main.progressBar
-import kotlinx.android.synthetic.main.activity_main.vpMain
+import kotlinx.android.synthetic.main.activity_camera.progressBar
+import kotlinx.android.synthetic.main.activity_camera.vpMain
 import kotlinx.android.synthetic.main.layout_camera.cvCamera
 import kotlinx.android.synthetic.main.layout_camera.tvOne
 import kotlinx.android.synthetic.main.layout_camera.tvThree
@@ -38,10 +38,9 @@ import javax.inject.Inject
 /**
  * Created by sammy on 08/11/2017.
  */
-
-class MainActivity : AppCompatActivity(), MainContract.View {
+class CameraActivity : AppCompatActivity(), CameraContract.View {
     @Inject
-    lateinit var presenter: MainContract.Presenter
+    lateinit var presenter: CameraContract.Presenter
 
     private val camera by lazy {
         Fotoapparat
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
 
         setupDi()
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_camera)
         setClickListeners()
     }
 
@@ -83,6 +82,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         countDownTimer.cancel()
         super.onStop()
     }
+    // endregion
 
     // region interface MainContact.View
     override fun showPermissionView() {
@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private fun setupDi() {
         DaggerActivityComponent.builder()
                 .applicationComponent((application as CameraForDummiesApplication).getComponent())
-                .mainModule(MainModule(this))
+                .cameraModule(CameraModule(this))
                 .build()
                 .inject(this)
     }

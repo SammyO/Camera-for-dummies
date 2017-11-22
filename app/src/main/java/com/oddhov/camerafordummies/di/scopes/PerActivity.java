@@ -8,7 +8,6 @@ import javax.inject.Scope;
 /**
  * Created by sammy on 19/11/2017.
  */
-
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PerActivity {

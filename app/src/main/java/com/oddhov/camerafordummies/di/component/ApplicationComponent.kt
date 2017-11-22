@@ -11,7 +11,6 @@ import javax.inject.Singleton
 /**
  * Created by sammy on 19/11/2017.
  */
-
 @Singleton
 @Component(modules = arrayOf(ApplicationModule::class, UtilsModule::class))
 interface ApplicationComponent {

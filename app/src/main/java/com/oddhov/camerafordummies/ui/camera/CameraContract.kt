@@ -1,14 +1,14 @@
-package com.oddhov.camerafordummies.ui.main
+package com.oddhov.camerafordummies.ui.camera
 
 import android.graphics.Bitmap
+import com.oddhov.camerafordummies.ui.base.BasePresenter
 import io.fotoapparat.result.PhotoResult
 import io.reactivex.Single
 
 /**
  * Created by sammy on 09/11/2017.
  */
-
-interface MainContract {
+interface CameraContract {
     interface View {
         fun showPermissionView()
         fun showTakePictureView()
@@ -32,10 +32,7 @@ interface MainContract {
         fun runMediaScanner(fileLocation: String)
     }
 
-    interface Presenter {
-        fun subscribe()
-        fun unsubscribe()
-
+    interface Presenter : BasePresenter {
         fun enablePermissionClicked()
         fun takePhotoClicked()
 

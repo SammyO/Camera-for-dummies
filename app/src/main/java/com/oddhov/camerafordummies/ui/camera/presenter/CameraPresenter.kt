@@ -1,9 +1,8 @@
-package com.oddhov.camerafordummies.ui.main.presenter
+package com.oddhov.camerafordummies.ui.camera.presenter
 
 import android.Manifest
-import android.os.Looper
 import com.oddhov.camerafordummies.data.extentions.applySchedulers
-import com.oddhov.camerafordummies.ui.main.MainContract
+import com.oddhov.camerafordummies.ui.camera.CameraContract
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.fotoapparat.result.adapter.rxjava2.SingleAdapter
 import timber.log.Timber
@@ -13,11 +12,10 @@ import javax.inject.Inject
 /**
  * Created by sammy on 09/11/2017.
  */
-
-class MainPresenter
+class CameraPresenter
 @Inject
-constructor(private val view: MainContract.View, private val repo: MainContract.Repo,
-            private val rxPermissions: RxPermissions) : MainContract.Presenter {
+constructor(private val view: CameraContract.View, private val repo: CameraContract.Repo,
+            private val rxPermissions: RxPermissions) : CameraContract.Presenter {
 
     override fun subscribe() {
         checkPermissions()

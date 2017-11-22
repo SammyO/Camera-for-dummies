@@ -9,7 +9,6 @@ import dagger.Provides
 /**
  * Created by sammy on 19/11/2017.
  */
-
 @Module
 class ApplicationModule(private val mApplication: Application) {
 

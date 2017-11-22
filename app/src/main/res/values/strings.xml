@@ -12,5 +12,7 @@
     <string name="toast_photo_taken_success">Photo taken and stored</string>
     <string name="toast_photo_taken_error">Something went wrong while processing your photo</string>
 
+    <string name="title_gallery">Gallery</string>
+
     <string name="word.cancel">Cancel</string>
 </resources>
