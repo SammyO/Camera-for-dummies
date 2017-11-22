@@ -1,0 +1,16 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/green_light1"
+    android:fitsSystemWindows="true">
+
+    <ImageView
+        android:id="@+id/ivResultImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/spacing_larger"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"/>
+
+</android.support.constraint.ConstraintLayout>

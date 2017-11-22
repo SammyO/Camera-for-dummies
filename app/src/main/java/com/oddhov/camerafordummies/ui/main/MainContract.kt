@@ -13,6 +13,9 @@ interface MainContract {
         fun showPermissionView()
         fun showTakePictureView()
         fun showCameraView()
+        fun showPhotoResultView()
+
+        fun setResultPhoto(bitmap: Bitmap)
 
         fun showStoragePermissionRationale()
         fun showCameraPermissionRationale()

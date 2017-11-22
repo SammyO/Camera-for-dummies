@@ -1,6 +1,7 @@
 package com.oddhov.camerafordummies.ui.main.presenter
 
 import android.Manifest
+import android.os.Looper
 import com.oddhov.camerafordummies.data.extentions.applySchedulers
 import com.oddhov.camerafordummies.ui.main.MainContract
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -51,10 +52,19 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
 
     override fun pictureTaken(result: io.fotoapparat.result.PhotoResult) {
         view.showProgressDialog()
+        view.showPhotoResultView()
 
-        result
+        val resultSingle = result
                 .toBitmap()
                 .adapt(SingleAdapter.toSingle())
+
+        resultSingle
+                .applySchedulers()
+                .subscribe({
+                    view.setResultPhoto(it.bitmap)
+                }, {})
+
+        resultSingle
                 .flatMap {
                     repo.rotateBitmap(it.bitmap)
                 }

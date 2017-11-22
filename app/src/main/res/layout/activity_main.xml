@@ -1,22 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/vpMain"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#33b5e5"
-    tools:context="com.oddhov.camerafordummies.ui.main.view.MainActivity">
+    android:fitsSystemWindows="true">
 
-    <include
-        android:id="@+id/layoutCameraPermission"
-        layout="@layout/layout_permission_request" />
+    <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/vpMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.oddhov.camerafordummies.ui.main.view.MainActivity">
 
-    <include
-        android:id="@+id/layoutCameraButton"
-        layout="@layout/layout_camera_button" />
+        <include
+            android:id="@+id/layoutCameraPermission"
+            layout="@layout/layout_permission_request" />
 
-    <include
-        android:id="@+id/layoutCamera"
-        layout="@layout/layout_camera" />
+        <include
+            android:id="@+id/layoutCameraButton"
+            layout="@layout/layout_camera_button" />
 
-</ViewFlipper>
+        <include
+            android:id="@+id/layoutCamera"
+            layout="@layout/layout_camera" />
+
+        <include
+            android:id="@+id/layoutPhotoResult"
+        layout="@layout/layout_photo_result" />
+
+    </ViewFlipper>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:progress="0"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        tools:visibility="visible" />
+    
+</android.support.constraint.ConstraintLayout>

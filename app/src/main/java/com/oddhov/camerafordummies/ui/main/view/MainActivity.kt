@@ -1,5 +1,6 @@
 package com.oddhov.camerafordummies.ui.main.view
 
+import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -20,17 +21,17 @@ import io.fotoapparat.parameter.selector.FocusModeSelectors.fixed
 import io.fotoapparat.parameter.selector.LensPositionSelectors.back
 import io.fotoapparat.parameter.selector.Selectors.firstAvailable
 import io.fotoapparat.parameter.selector.SizeSelectors.biggestSize
+import kotlinx.android.synthetic.main.activity_main.progressBar
 import kotlinx.android.synthetic.main.activity_main.vpMain
-import kotlinx.android.synthetic.main.layout_camera.camera_view
-import kotlinx.android.synthetic.main.layout_camera.progressBar
+import kotlinx.android.synthetic.main.layout_camera.cvCamera
 import kotlinx.android.synthetic.main.layout_camera.tvOne
 import kotlinx.android.synthetic.main.layout_camera.tvThree
 import kotlinx.android.synthetic.main.layout_camera.tvTwo
 import kotlinx.android.synthetic.main.layout_camera_button.btnTakePicture
 import kotlinx.android.synthetic.main.layout_permission_request.btnEnablePermission
+import kotlinx.android.synthetic.main.layout_photo_result.ivResultImage
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val camera by lazy {
         Fotoapparat
                 .with(this)
-                .into(camera_view)
+                .into(cvCamera)
                 .previewScaleType(ScaleType.CENTER_CROP)
                 .photoSize(biggestSize())
                 .lensPosition(back())
@@ -96,6 +97,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         changeScreenState(R.id.layoutCamera)
     }
 
+    override fun showPhotoResultView() {
+        changeScreenState(R.id.layoutPhotoResult)
+    }
+
+    override fun setResultPhoto(bitmap: Bitmap) {
+        ivResultImage.setImageBitmap(bitmap)
+        ivResultImage.rotation = 90f
+    }
+
     override fun showStoragePermissionRationale() {
         alert(R.string.alert_allow_camera_permission_message,
                 R.string.alert_allow_camera_permission_title) {
@@ -129,10 +139,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun runCounter() {
-        countDownTimer = object : CountDownTimer(4000, 100) {
+        countDownTimer = object : CountDownTimer(4000, 500) {
             override fun onTick(millisUntilFinished: Long) {
-                Timber.e("onTick %d and %s", millisUntilFinished,
-                        Math.round(millisUntilFinished.toFloat() / 1000.0f))
                 when (Math.round(millisUntilFinished.toFloat() / 1000.0f)) {
                     3 -> showCounterOne()
                     2 -> showCounterTwo()
@@ -142,7 +150,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             override fun onFinish() {
                 hideCounter()
                 presenter.pictureTaken(camera.takePicture())
-                Timber.e("onFinish ")
             }
         }.start()
     }
