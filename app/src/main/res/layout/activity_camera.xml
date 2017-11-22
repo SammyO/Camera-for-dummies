@@ -27,7 +27,7 @@
 
         <include
             android:id="@+id/layoutPhotoResult"
-        layout="@layout/layout_photo_result" />
+            layout="@layout/layout_photo_result" />
 
     </ViewFlipper>
 

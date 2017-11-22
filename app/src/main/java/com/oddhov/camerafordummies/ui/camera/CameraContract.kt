@@ -29,12 +29,15 @@ interface CameraContract {
         fun startCamera()
         fun stopCamera()
 
+        fun openGalleryActivity()
+
         fun runMediaScanner(fileLocation: String)
     }
 
     interface Presenter : BasePresenter {
         fun enablePermissionClicked()
         fun takePhotoClicked()
+        fun onHomeClicked()
 
         fun pictureTaken(result: PhotoResult)
     }

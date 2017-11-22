@@ -5,6 +5,8 @@ import com.oddhov.camerafordummies.data.extentions.applySchedulers
 import com.oddhov.camerafordummies.ui.camera.CameraContract
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.fotoapparat.result.adapter.rxjava2.SingleAdapter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -48,6 +50,10 @@ constructor(private val view: CameraContract.View, private val repo: CameraContr
         view.runCounter()
     }
 
+    override fun onHomeClicked() {
+        view.openGalleryActivity()
+    }
+
     override fun pictureTaken(result: io.fotoapparat.result.PhotoResult) {
         view.showProgressDialog()
         view.showPhotoResultView()
@@ -57,19 +63,20 @@ constructor(private val view: CameraContract.View, private val repo: CameraContr
                 .adapt(SingleAdapter.toSingle())
 
         resultSingle
-                .applySchedulers()
-                .subscribe({
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map {
                     view.setResultPhoto(it.bitmap)
-                }, {})
-
-        resultSingle
+                    it
+                }
+                .observeOn(Schedulers.io())
                 .flatMap {
                     repo.rotateBitmap(it.bitmap)
                 }
                 .flatMap {
                     repo.storeBitmap(it)
                 }
-                .applySchedulers()
+                .observeOn(AndroidSchedulers.mainThread())
                 .doFinally {
                     view.hideProgressDialog() }
                 .subscribe({

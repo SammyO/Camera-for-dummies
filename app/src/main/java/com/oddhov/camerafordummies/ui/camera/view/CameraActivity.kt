@@ -1,16 +1,20 @@
 package com.oddhov.camerafordummies.ui.camera.view
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import com.oddhov.camerafordummies.CameraForDummiesApplication
 import com.oddhov.camerafordummies.R
-import com.oddhov.camerafordummies.di.component.DaggerActivityComponent
+import com.oddhov.camerafordummies.di.component.DaggerCameraComponent
 import com.oddhov.camerafordummies.di.modules.CameraModule
 import com.oddhov.camerafordummies.ui.camera.CameraContract
+import com.oddhov.camerafordummies.ui.gallery.view.GalleryActivity
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.Loggers.logcat
 import io.fotoapparat.log.Loggers.loggers
@@ -30,6 +34,7 @@ import kotlinx.android.synthetic.main.layout_camera.tvTwo
 import kotlinx.android.synthetic.main.layout_camera_button.btnTakePicture
 import kotlinx.android.synthetic.main.layout_permission_request.btnEnablePermission
 import kotlinx.android.synthetic.main.layout_photo_result.ivResultImage
+import kotlinx.android.synthetic.main.layout_photo_result.toolbar
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
 import javax.inject.Inject
@@ -84,6 +89,15 @@ class CameraActivity : AppCompatActivity(), CameraContract.View {
     }
     // endregion
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            presenter.onHomeClicked()
+            return true
+        }
+        return false
+    }
+    // endregion
+
     // region interface MainContact.View
     override fun showPermissionView() {
         changeScreenState(R.id.layoutCameraPermission)
@@ -98,6 +112,13 @@ class CameraActivity : AppCompatActivity(), CameraContract.View {
     }
 
     override fun showPhotoResultView() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         changeScreenState(R.id.layoutPhotoResult)
     }
 
@@ -168,6 +189,10 @@ class CameraActivity : AppCompatActivity(), CameraContract.View {
         cameraStarted = false
     }
 
+    override fun openGalleryActivity() {
+        startActivity(Intent(this, GalleryActivity::class.java))
+    }
+
     override fun runMediaScanner(fileLocation: String) {
         MediaScannerConnection.scanFile(this, arrayOf(fileLocation), null
         ) { _, _ -> }
@@ -176,7 +201,7 @@ class CameraActivity : AppCompatActivity(), CameraContract.View {
 
     // region Helper Methods (UI)
     private fun setupDi() {
-        DaggerActivityComponent.builder()
+        DaggerCameraComponent.builder()
                 .applicationComponent((application as CameraForDummiesApplication).getComponent())
                 .cameraModule(CameraModule(this))
                 .build()

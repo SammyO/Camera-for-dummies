@@ -4,8 +4,6 @@
     <color name="colorPrimaryDark">@color/turquoise</color>
     <color name="colorAccent">@color/beige</color>
 
-    <color name="black_overlay">#66000000</color>
-
     <!-- beige -->
     <color name="beige_light2">#FBF8F5</color>
     <color name="beige_light1">#F4EDE4</color>

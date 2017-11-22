@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.oddhov.camerafordummies.CameraForDummiesApplication
 import com.oddhov.camerafordummies.R
-import com.oddhov.camerafordummies.di.component.DaggerActivityComponent
+import com.oddhov.camerafordummies.di.component.DaggerGalleryComponent
 import com.oddhov.camerafordummies.di.modules.GalleryModule
 import com.oddhov.camerafordummies.ui.gallery.GalleryContract
 import javax.inject.Inject
@@ -37,7 +37,7 @@ class GalleryActivity : AppCompatActivity(), GalleryContract.View {
 
     // region Helper Methods (UI)
     private fun setupDi() {
-        DaggerActivityComponent.builder()
+        DaggerGalleryComponent.builder()
                 .applicationComponent((application as CameraForDummiesApplication).getComponent())
                 .galleryModule(GalleryModule(this))
                 .build()
