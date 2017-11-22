@@ -1,0 +1,69 @@
+<resources>
+    <!-- font sizes -->
+    <dimen name="font_bigger">40sp</dimen>
+    <dimen name="font_big">36sp</dimen>
+    <dimen name="font_largest">28sp</dimen>
+    <dimen name="font_larger">22sp</dimen>
+    <dimen name="font_large">18sp</dimen>
+    <dimen name="font_normal">16sp</dimen>
+    <dimen name="font_small">14sp</dimen>
+    <dimen name="font_smaller">12sp</dimen>
+    <dimen name="font_smallest">10sp</dimen>
+
+    <!-- typical spacing between two views -->
+    <dimen name="spacing_more_enormous">184dp</dimen>
+    <dimen name="spacing_enormous">160dp</dimen>
+    <dimen name="spacing_quite_huge">136dp</dimen>
+    <dimen name="spacing_quite_big">90dp</dimen>
+    <dimen name="spacing_huge">80dp</dimen>
+    <dimen name="spacing_biggest">72dp</dimen>
+    <dimen name="spacing_bigger">64dp</dimen>
+    <dimen name="spacing_big">40dp</dimen>
+    <dimen name="spacing_larger">32dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_normal">16dp</dimen>
+    <dimen name="spacing_small">10dp</dimen>
+    <dimen name="spacing_smaller">8dp</dimen>
+    <dimen name="spacing_smallest">6dp</dimen>
+    <dimen name="spacing_tiny">4dp</dimen>
+
+    <!-- typical sizes of views -->
+    <dimen name="image_height_huge">160dp</dimen>
+    <dimen name="image_height_bigger">140dp</dimen>
+    <dimen name="image_height_big">120dp</dimen>
+    <dimen name="image_height_taller">100dp</dimen>
+    <dimen name="image_height_tall">80dp</dimen>
+    <dimen name="image_height_normal">40dp</dimen>
+    <dimen name="image_height_short">24dp</dimen>
+    <dimen name="image_height_small">12dp</dimen>
+    <dimen name="icon_height_normal">32dp</dimen>
+
+    <dimen name="list_row_height_normal">60dp</dimen>
+
+    <!-- rounded corners -->
+    <dimen name="rounded_normal">30dp</dimen>
+    <dimen name="rounded_tiny">5dp</dimen>
+
+    <!-- image size -->
+    <dimen name="square_normal">30dp</dimen>
+
+    <!-- code input layout -->
+    <dimen name="code_layout_size">78dp</dimen>
+
+    <!-- CodeInputLayout sizes -->
+    <dimen name="codeinput_textedit_dimension_small">50dp</dimen>
+    <dimen name="codeinput_textedit_dimension_big">65dp</dimen>
+
+    <dimen name="codeinput_safe_dot_padding_small">20dp</dimen>
+    <dimen name="codeinput_safe_dot_padding_big">26dp</dimen>
+
+    <dimen name="codeinput_textedit_padding">0dp</dimen>
+
+    <dimen name="codeinput_button_height">40dp</dimen>
+
+    <dimen name="codeinput_font">@dimen/font_largest</dimen>
+
+    <!--other-->
+    <dimen name="standard_elevation">3dp</dimen>
+
+</resources>

@@ -2,6 +2,7 @@ package com.oddhov.camerafordummies.ui.main.view
 
 import android.media.MediaScannerConnection
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.oddhov.camerafordummies.CameraForDummiesApplication
@@ -20,12 +21,16 @@ import io.fotoapparat.parameter.selector.LensPositionSelectors.back
 import io.fotoapparat.parameter.selector.Selectors.firstAvailable
 import io.fotoapparat.parameter.selector.SizeSelectors.biggestSize
 import kotlinx.android.synthetic.main.activity_main.vpMain
-import kotlinx.android.synthetic.main.layout_camera.btnTakePicture
 import kotlinx.android.synthetic.main.layout_camera.camera_view
 import kotlinx.android.synthetic.main.layout_camera.progressBar
+import kotlinx.android.synthetic.main.layout_camera.tvOne
+import kotlinx.android.synthetic.main.layout_camera.tvThree
+import kotlinx.android.synthetic.main.layout_camera.tvTwo
+import kotlinx.android.synthetic.main.layout_camera_button.btnTakePicture
 import kotlinx.android.synthetic.main.layout_permission_request.btnEnablePermission
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -56,6 +61,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     private var cameraStarted = false
+    private lateinit var countDownTimer: CountDownTimer
 
     // region Activity Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,12 +79,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     override fun onStop() {
         presenter.unsubscribe()
+        countDownTimer.cancel()
         super.onStop()
     }
 
     // region interface MainContact.View
     override fun showPermissionView() {
         changeScreenState(R.id.layoutCameraPermission)
+    }
+
+    override fun showTakePictureView() {
+        changeScreenState(R.id.layoutCameraButton)
     }
 
     override fun showCameraView() {
@@ -117,6 +128,25 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         progressBar.visibility = View.VISIBLE
     }
 
+    override fun runCounter() {
+        countDownTimer = object : CountDownTimer(4000, 100) {
+            override fun onTick(millisUntilFinished: Long) {
+                Timber.e("onTick %d and %s", millisUntilFinished,
+                        Math.round(millisUntilFinished.toFloat() / 1000.0f))
+                when (Math.round(millisUntilFinished.toFloat() / 1000.0f)) {
+                    3 -> showCounterOne()
+                    2 -> showCounterTwo()
+                    1 -> showCounterThree()
+                }
+            }
+            override fun onFinish() {
+                hideCounter()
+                presenter.pictureTaken(camera.takePicture())
+                Timber.e("onFinish ")
+            }
+        }.start()
+    }
+
     override fun startCamera() {
         if (!cameraStarted) {
             camera.start()
@@ -148,11 +178,35 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private fun setClickListeners() {
         btnEnablePermission.setOnClickListener { presenter.enablePermissionClicked() }
-        btnTakePicture.setOnClickListener { presenter.pictureTaken(camera.takePicture()) }
+        btnTakePicture.setOnClickListener { presenter.takePhotoClicked() }
     }
 
     private fun changeScreenState(state: Int) {
         vpMain.displayedChild = vpMain.indexOfChild(vpMain.findViewById(state))
+    }
+
+    private fun showCounterOne() {
+        tvOne.visibility = View.VISIBLE
+        tvTwo.visibility = View.INVISIBLE
+        tvThree.visibility = View.INVISIBLE
+    }
+
+    private fun showCounterTwo() {
+        tvOne.visibility = View.INVISIBLE
+        tvTwo.visibility = View.VISIBLE
+        tvThree.visibility = View.INVISIBLE
+    }
+
+    private fun showCounterThree() {
+        tvOne.visibility = View.INVISIBLE
+        tvTwo.visibility = View.INVISIBLE
+        tvThree.visibility = View.VISIBLE
+    }
+
+    private fun hideCounter() {
+        tvOne.visibility = View.GONE
+        tvTwo.visibility = View.GONE
+        tvThree.visibility = View.GONE
     }
     // endregion
 }

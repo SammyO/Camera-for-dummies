@@ -12,6 +12,10 @@
         layout="@layout/layout_permission_request" />
 
     <include
+        android:id="@+id/layoutCameraButton"
+        layout="@layout/layout_camera_button" />
+
+    <include
         android:id="@+id/layoutCamera"
         layout="@layout/layout_camera" />
 

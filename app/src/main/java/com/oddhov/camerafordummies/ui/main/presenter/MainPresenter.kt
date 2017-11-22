@@ -44,6 +44,11 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
                 })
     }
 
+    override fun takePhotoClicked() {
+        view.showCameraView()
+        view.runCounter()
+    }
+
     override fun pictureTaken(result: io.fotoapparat.result.PhotoResult) {
         view.showProgressDialog()
 
@@ -79,7 +84,7 @@ constructor(private val view: MainContract.View, private val repo: MainContract.
     }
 
     private fun enableCameraView() {
-        view.showCameraView()
+        view.showTakePictureView()
         view.startCamera()
     }
 

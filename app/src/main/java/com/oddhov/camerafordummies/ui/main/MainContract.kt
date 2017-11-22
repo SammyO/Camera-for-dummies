@@ -11,6 +11,7 @@ import io.reactivex.Single
 interface MainContract {
     interface View {
         fun showPermissionView()
+        fun showTakePictureView()
         fun showCameraView()
 
         fun showStoragePermissionRationale()
@@ -20,6 +21,7 @@ interface MainContract {
         fun showPhotoErrorToast()
         fun showProgressDialog()
         fun hideProgressDialog()
+        fun runCounter()
 
         fun startCamera()
         fun stopCamera()
@@ -32,6 +34,7 @@ interface MainContract {
         fun unsubscribe()
 
         fun enablePermissionClicked()
+        fun takePhotoClicked()
 
         fun pictureTaken(result: PhotoResult)
     }
