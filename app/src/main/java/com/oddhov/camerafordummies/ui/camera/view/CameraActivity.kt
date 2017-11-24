@@ -191,6 +191,7 @@ class CameraActivity : AppCompatActivity(), CameraContract.View {
 
     override fun openGalleryActivity() {
         startActivity(Intent(this, GalleryActivity::class.java))
+        finish()
     }
 
     override fun runMediaScanner(fileLocation: String) {

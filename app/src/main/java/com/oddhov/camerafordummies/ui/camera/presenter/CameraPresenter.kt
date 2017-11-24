@@ -1,11 +1,11 @@
 package com.oddhov.camerafordummies.ui.camera.presenter
 
 import android.Manifest
-import com.oddhov.camerafordummies.data.extentions.applySchedulers
 import com.oddhov.camerafordummies.ui.camera.CameraContract
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.fotoapparat.result.adapter.rxjava2.SingleAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,30 +19,34 @@ class CameraPresenter
 constructor(private val view: CameraContract.View, private val repo: CameraContract.Repo,
             private val rxPermissions: RxPermissions) : CameraContract.Presenter {
 
+    private val disposables = CompositeDisposable()
+
     override fun subscribe() {
         checkPermissions()
     }
 
     override fun unsubscribe() {
-
+        disposables.clear()
     }
 
     override fun enablePermissionClicked() {
-        rxPermissions.requestEach(Manifest.permission.CAMERA)
-                .subscribe({ permission ->
-                    if (permission.granted) {
-                        rxPermissions.requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                .all { it.granted }
-                                .subscribe { granted ->
-                                    if (granted) enableCameraView()
-                                    else view.showStoragePermissionRationale()
-                                }
+        disposables.add(
+            rxPermissions.requestEach(Manifest.permission.CAMERA)
+                    .subscribe({ permission ->
+                        if (permission.granted) {
+                            rxPermissions.requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    .all { it.granted }
+                                    .subscribe { granted ->
+                                        if (granted) enableCameraView()
+                                        else view.showStoragePermissionRationale()
+                                    }
 
-                    } else if (!permission.shouldShowRequestPermissionRationale) {
-                        view.showCameraPermissionRationale()
-                    }
-                })
+                        } else if (!permission.shouldShowRequestPermissionRationale) {
+                            view.showCameraPermissionRationale()
+                        }
+                    })
+        )
     }
 
     override fun takePhotoClicked() {
@@ -58,44 +62,46 @@ constructor(private val view: CameraContract.View, private val repo: CameraContr
         view.showProgressDialog()
         view.showPhotoResultView()
 
-        val resultSingle = result
-                .toBitmap()
-                .adapt(SingleAdapter.toSingle())
-
-        resultSingle
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map {
-                    view.setResultPhoto(it.bitmap)
-                    it
-                }
-                .observeOn(Schedulers.io())
-                .flatMap {
-                    repo.rotateBitmap(it.bitmap)
-                }
-                .flatMap {
-                    repo.storeBitmap(it)
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally {
-                    view.hideProgressDialog() }
-                .subscribe({
-                    view.runMediaScanner(it)
-                    view.showPhotoTakenToast()
-                }, {
-                    Timber.e(it)
-                    view.showPhotoErrorToast()
-                })
+        disposables.add(
+            result
+                    .toBitmap()
+                    .adapt(SingleAdapter.toSingle())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map {
+                        view.setResultPhoto(it.bitmap)
+                        it
+                    }
+                    .observeOn(Schedulers.io())
+                    .flatMap {
+                        repo.rotateBitmap(it.bitmap)
+                    }
+                    .flatMap {
+                        repo.storeBitmap(it)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally {
+                        view.hideProgressDialog() }
+                    .subscribe({
+                        view.runMediaScanner(it)
+                        view.showPhotoTakenToast()
+                    }, {
+                        Timber.e(it)
+                        view.showPhotoErrorToast()
+                    })
+        )
     }
 
     private fun checkPermissions() {
-        rxPermissions.requestEach(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .all({ it.granted })
-                .subscribe { granted ->
-                    if (granted) enableCameraView()
-                    else enablePermissionsView()
-                }
+        disposables.add(
+            rxPermissions.requestEach(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .all({ it.granted })
+                    .subscribe { granted ->
+                        if (granted) enableCameraView()
+                        else enablePermissionsView()
+                    }
+        )
     }
 
     private fun enableCameraView() {
