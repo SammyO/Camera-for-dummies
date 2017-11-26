@@ -47,6 +47,7 @@ dependencies {
     testImplementation "junit:junit:${project.junitVersion}"
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation "com.android.support:recyclerview-v7:${project.appCompatVersion}"
 
     // Dagger
     implementation "com.google.dagger:dagger:${DAGGER_VERSION}"
@@ -55,7 +56,6 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
     kapt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
     kapt "com.google.dagger:dagger-android-processor:${DAGGER_VERSION}"
-
 
     // Anko
     implementation "org.jetbrains.anko:anko-commons:${ANKO_VERSION}"
@@ -78,6 +78,10 @@ dependencies {
     // Fotoapparat
     implementation 'io.fotoapparat.fotoapparat:library:1.4.1'
     implementation "io.fotoapparat.fotoapparat:adapter-rxjava2:1.4.1"
+
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.3.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
 
     //Misc
     implementation 'com.jakewharton.timber:timber:4.5.1'

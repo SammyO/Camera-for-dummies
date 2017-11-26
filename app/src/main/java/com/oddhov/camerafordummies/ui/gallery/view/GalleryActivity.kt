@@ -2,11 +2,13 @@ package com.oddhov.camerafordummies.ui.gallery.view
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
 import com.oddhov.camerafordummies.CameraForDummiesApplication
 import com.oddhov.camerafordummies.R
 import com.oddhov.camerafordummies.di.component.DaggerGalleryComponent
 import com.oddhov.camerafordummies.di.modules.GalleryModule
 import com.oddhov.camerafordummies.ui.gallery.GalleryContract
+import kotlinx.android.synthetic.main.activity_gallery.rvGallery
 import javax.inject.Inject
 
 /**
@@ -32,6 +34,13 @@ class GalleryActivity : AppCompatActivity(), GalleryContract.View {
     override fun onStop() {
         presenter.unsubscribe()
         super.onStop()
+    }
+    // endregion
+
+    // region GalleryContract.View Methods
+    override fun setupAdapter() {
+        rvGallery.layoutManager = GridLayoutManager(this, 2)
+        rvGallery.adapter = GalleryAdapter(presenter)
     }
     // endregion
 
